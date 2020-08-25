@@ -11,6 +11,14 @@ export const clearResult = () => {
     DOM.resultPage.innerHTML = "";
 };
 
+export const highlightSelected = id => {
+    const highlightedArr = Array.from(document.querySelectorAll('.results__link--active'));
+    highlightedArr.forEach(e => { // loop the array and remove its class element 
+        e.classList.remove('results__link--active');
+    });
+    document.querySelector(`a[href="#${id}"]`).classList.add('results__link--active');
+}
+
 /*
 eg: Pasta with tomato and pinach 
 acc: 0/ acc + cur.length/ 0 + 5 = 5 < 17/ true => push [Pasta]

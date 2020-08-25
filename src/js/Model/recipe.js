@@ -28,4 +28,69 @@ export default class Recipe{
     servingSize (){
         this.servings = 4;
     }
+
+    parseIngredients () {
+        const unitLong = ['tablespoons', 'tablespoon', 'teaspoons', 'teaspoon', 'cups', 'bounces', 'bounce'];
+        const unitShort = ['tbsp', 'tbsp', 'tsp', 'tsp', 'cup', 'oz', 'oz'];
+        const units = [...unitShort, 'kg', 'g'];
+
+        // create new ingredients arr by return new value from iterating initial ingredients
+        const newIngredients = this.ingredients.map(e => {
+
+            let ingredients = e.toLowerCase(); // lower all elements in array
+            
+            unitLong.forEach((unit, index) => {
+                ingredients = ingredients.replace(unit, units[index]); //replace initial units to short ones
+            });
+
+            ingredients = ingredients.replace(/ *\([^)]*\) */g, " "); // remove parentheses
+            
+            const ingredientsArr = ingredients.split(' ');
+            const unitIndex = ingredientsArr.findIndex(e2 => units.includes(e2)); // get index of units (tsp, tbps, cup, etc ...)
+
+            let ingredientsObj;
+            if (unitIndex > -1){ // there are both numbers and units
+                
+                const numberArr = ingredientsArr.slice(0, unitIndex); //split numbers from ingredient arr, not included end parameter
+
+                let number;
+                if (numberArr.length === 1){
+                    number = eval(ingredientsArr[0].replace('-', '+')); // eg. 5-1/2 => 5+1/2 => eval(5+1/2) = 5.5
+                } else{
+                    number = eval(ingredientsArr.slice(0, unitIndex).join('+'));
+                }
+
+                ingredientsObj = {
+                    number,
+                    unit: ingredientsArr[unitIndex],
+                    ingredients: ingredientsArr.slice(unitIndex + 1).join(' ') //slice from unitIndex + 1 
+                };
+            } else if (parseInt(ingredientsArr[0], 10)){ // there is only number 
+                ingredientsObj = {
+                    number: parseInt(ingredientsArr[0], 10), //index 0 = number
+                    unit: '',
+                    ingredients: ingredientsArr.slice(1).join(' ') // slice from index = 1
+                };
+            } else if (unitIndex === -1){ // there are no num and unit in ingredients
+                ingredientsObj = {
+                    number: 1,
+                    unit: '',
+                    ingredients
+                };
+            };
+            return ingredientsObj;
+        });
+        this.ingredients = newIngredients;
+    }
+
+    updateServingSize (type){
+        const newServingSize = type === 'dec'? this.servings - 1: this.servings + 1; 
+        
+        // update ingredients
+        this.ingredients.map(el => {
+            el.number *= (newServingSize/ this.servings);
+        });
+        
+        return this.servings = newServingSize;
+    }
 }
