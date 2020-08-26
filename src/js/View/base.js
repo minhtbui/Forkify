@@ -5,6 +5,9 @@ export const DOM = {
     resultList: document.querySelector('.results__list'),
     resultPage: document.querySelector('.results__pages'),
     recipe: document.querySelector('.recipe'),
+    shopping: document.querySelector('.shopping__list'),
+    likeField: document.querySelector('.likes__field'),
+    likeList: document.querySelector('.likes__list'),
 };
 
 const DOMstrings = {

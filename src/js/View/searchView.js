@@ -13,10 +13,16 @@ export const clearResult = () => {
 
 export const highlightSelected = id => {
     const highlightedArr = Array.from(document.querySelectorAll('.results__link--active'));
+    
     highlightedArr.forEach(e => { // loop the array and remove its class element 
         e.classList.remove('results__link--active');
     });
-    document.querySelector(`a[href="#${id}"]`).classList.add('results__link--active');
+
+    const highlightedID = document.querySelector(`.results__link[href*="${id}"]`)
+
+    if (highlightedID){
+        highlightedID.classList.add('results__link--active');
+    }
 }
 
 /*
@@ -26,7 +32,7 @@ acc: 5/ acc + cur.length/ 5 + 4 = 9 < 17/ true => push [Pasta with]
 acc: 9/ acc + cur.length/ 9 + 6 = 15 < 17/ true => push [Pasta with tomata]
 acc: 15/ acc + cur.length/ 15 + 3 = 18 > 17/ false => stop
 */
-const limitTitleChar = (title, limit = 17) => {
+export const limitTitleChar = (title, limit = 17) => {
     const newTitle = [];
     if (title.length > limit){
         title.split(' ').reduce((acc, cur) => {
