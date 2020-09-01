@@ -215,9 +215,8 @@ DOM.recipe.addEventListener('click', (e) => {
       // add all ingredients btn to shopping list
       listCtrl();
    } else if (e.target.matches('.recipe__icon, .recipe__icon *')) {
-      let ingrID;
       // add single ingredients check to shopping list
-      ingrID = e.target.closest('.recipe__item').dataset.itemid;
+      let ingrID = e.target.closest('.recipe__item').dataset.itemid;
       listCtrl(ingrID);
    } else if (e.target.matches('.recipe__love, .recipe__love *')) {
       likeCtrl();
