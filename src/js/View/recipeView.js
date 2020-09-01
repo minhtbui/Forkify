@@ -5,9 +5,9 @@ export const clearRecipe = () => {
    DOM.recipe.innerHTML = '';
 };
 
-// single ingredient
+// single ingredient **********************************  dataset key can't have UPPERCASE
 const ingredientsList = (ingredient) => ` 
-        <li class="recipe__item">
+        <li class="recipe__item" data-itemid=${ingredient.id}> 
             <svg class="recipe__icon">
                 <use href="img/icons.svg#icon-check"></use>
             </svg>
