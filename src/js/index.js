@@ -105,13 +105,28 @@ const recipeCtrl = async () => {
 
 /********************** ITEM LIST CONTROLER *********************/
 
-const listCtrl = () => {
+const listCtrl = (ingrID) => {
    if (!state.list) state.list = new List();
-
-   state.recipe.ingredients.forEach((e) => {
-      let item = state.list.addItem(e.id, e.number, e.unit, e.ingredients);
-      listView.renderItem(item);
-   });
+   let ingrItem, ingrList;
+   if (ingrID) {
+      //loop each ingredient in the list of ingredients
+      //in condition, if ingredient id === ingr target => ingrItem = ingrArr
+      for (let e of state.recipe.ingredients) {
+         if (e.id === ingrID) ingrItem = e;
+      }
+      ingrList = state.list.addItem(
+         ingrItem.id,
+         ingrItem.number,
+         ingrItem.unit,
+         ingrItem.ingredients,
+      );
+      listView.renderItem(ingrList);
+   } else {
+      state.recipe.ingredients.forEach((e) => {
+         let item = state.list.addItem(e.id, e.number, e.unit, e.ingredients);
+         listView.renderItem(item);
+      });
+   }
    listView.renderClearItemsBtn(state.list.items); //toggle clear items btn
 };
 
@@ -200,23 +215,10 @@ DOM.recipe.addEventListener('click', (e) => {
       // add all ingredients btn to shopping list
       listCtrl();
    } else if (e.target.matches('.recipe__icon, .recipe__icon *')) {
-      let ingrID, ingrItem, ingrList;
+      let ingrID;
       // add single ingredients check to shopping list
       ingrID = e.target.closest('.recipe__item').dataset.itemid;
-
-      //loop each ingredient in the list of ingredients
-      //in condition, if ingredient id === ingr target => ingrItem = ingrArr
-      for (e of state.recipe.ingredients) {
-         if (e.id === ingrID) ingrItem = e;
-      }
-      ingrList = state.list.addItem(
-         ingrItem.id,
-         ingrItem.number,
-         ingrItem.unit,
-         ingrItem.ingredients,
-      );
-      listView.renderItem(ingrList);
-      listView.renderClearItemsBtn(state.list.items); //toggle clear items btn
+      listCtrl(ingrID);
    } else if (e.target.matches('.recipe__love, .recipe__love *')) {
       likeCtrl();
    }
